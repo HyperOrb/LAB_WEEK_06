@@ -1,8 +1,9 @@
 package com.example.lab_week_06
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.appcompat.app.AlertDialog // Add this import
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lab_week_06.model.CatBreed
@@ -15,7 +16,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private val catAdapter by lazy {
-        // Implement the OnClickListener here
         CatAdapter(layoutInflater, GlideImageLoader(this), object : CatAdapter.OnClickListener {
             override fun onItemClick(cat: CatModel) {
                 showSelectionDialog(cat)
@@ -30,8 +30,12 @@ class MainActivity : AppCompatActivity() {
         recyclerView.adapter = catAdapter
         recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
 
+        // Add these lines to attach the swipe helper
+        val itemTouchHelper = ItemTouchHelper(catAdapter.swipeToDeleteCallback)
+        itemTouchHelper.attachToRecyclerView(recyclerView)
+
         catAdapter.setData(
-            listOf(
+            mutableListOf(
                 CatModel(
                     Gender.Male,
                     CatBreed.BalineseJavanese,
@@ -52,12 +56,61 @@ class MainActivity : AppCompatActivity() {
                     "Curious George",
                     "Award winning investigator",
                     "https://cdn2.thecatapi.com/images/bar.jpg"
+                ),
+                // Added 7 more items below
+                CatModel(
+                    Gender.Male,
+                    CatBreed.ExoticShorthair,
+                    "Leo",
+                    "Loves to nap in the sun",
+                    "https://cdn2.thecatapi.com/images/egv.jpg"
+                ),
+                CatModel(
+                    Gender.Female,
+                    CatBreed.BalineseJavanese,
+                    "Luna",
+                    "Very playful and energetic",
+                    "https://cdn2.thecatapi.com/images/7dj.jpg"
+                ),
+                CatModel(
+                    Gender.Male,
+                    CatBreed.AmericanCurl,
+                    "Milo",
+                    "A bit shy but very sweet",
+                    "https://cdn2.thecatapi.com/images/bar.jpg"
+                ),
+                CatModel(
+                    Gender.Female,
+                    CatBreed.ExoticShorthair,
+                    "Daisy",
+                    "Always looking for treats",
+                    "https://cdn2.thecatapi.com/images/egv.jpg"
+                ),
+                CatModel(
+                    Gender.Male,
+                    CatBreed.BalineseJavanese,
+                    "Simba",
+                    "Thinks he's the king",
+                    "https://cdn2.thecatapi.com/images/7dj.jpg"
+                ),
+                CatModel(
+                    Gender.Female,
+                    CatBreed.AmericanCurl,
+                    "Nala",
+                    "Loves to cuddle and purr",
+                    "https://cdn2.thecatapi.com/images/bar.jpg"
+                ),
+                CatModel(
+                    Gender.Unknown,
+                    CatBreed.ExoticShorthair,
+                    "Shadow",
+                    "Master of hiding",
+                    "https://cdn2.thecatapi.com/images/egv.jpg"
                 )
             )
         )
     }
 
-    // Add this function
     private fun showSelectionDialog(cat: CatModel) {
         AlertDialog.Builder(this)
             .setTitle("Cat Selected")
